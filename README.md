@@ -15,3 +15,9 @@ You could use this to draw out a dishes desired curve without having to add a nu
 #
 
 An offset fed dish is nothing more than a cutout section (away from the center) of a larger straight fed circular prime focus dish.
+
+Image from https://commons.wikimedia.org/wiki/File:Parabolic_antenna_types2.svg ..
+
+<div align="center">
+<img src="/Offset_feed.png">
+</div>
