@@ -14,7 +14,7 @@ You could use this to draw out a dishes desired curve without having to add a nu
 
 <br />
 
-Another way is to slowly and smoothly rotate a bowl (any shape) of liquid (water say), the surface, once settled, will form a perfect parabolic shape.
+Another way is to slowly and smoothly rotate a bowl (any shape) of liquid (water say), the surface, once settled, will form a perfect paraboloid.
 <br />
 This technique has been used as a visible light telescope mirror using say mercury as the liquid ..
 
