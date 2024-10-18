@@ -19,7 +19,5 @@ An offset fed dish is nothing more than a cutout section (away from the center) 
 Image from https://commons.wikimedia.org/wiki/File:Parabolic_antenna_types2.svg ..
 
 <div align="center">
-<img src="/Offset_feed.png">
-<img src="/Offset_feed.png width="400">
-<br/>
+<img src="/Offset_feed.png width="400" />
 </div>
