@@ -9,3 +9,6 @@ You could use this to draw out a dishes desired curve without having to add a nu
 <div align="center">
 <img src="/Bent_steel_rod.png">
 </div>
+
+
+An offset fed dish is nothing more than a cutout section from a circular prime focus dish.
