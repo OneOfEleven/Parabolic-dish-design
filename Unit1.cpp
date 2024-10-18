@@ -396,8 +396,8 @@ std::vector < std::pair <double, double> > __fastcall compute_beam_width(const d
 
 	std::vector < std::pair <double, double> > bw;
 
-   if (dia_meter < 0.01 || freq_Hz < 1e5 || eff_abs < 0.01 || max_dBi < 1.0)
-   	return bw;
+	if (dia_meter < 0.01 || freq_Hz < 1e5 || eff_abs < 0.01 || max_dBi < 1.0)
+		return bw;
 
 #if 0
 	// table dB
@@ -409,8 +409,8 @@ std::vector < std::pair <double, double> > __fastcall compute_beam_width(const d
 		// access the values ..
 		//   bw[i].first;   // dB
 		//   bw[i].second;  // beam width degress
-      if (dB >= max_dBi)
-      	break;           // don't bother going behind the dish (backward radiation)
+		if (dB >= max_dBi)
+			break;         // don't bother going behind the dish (backward radiation)
 	}
 	bw.push_back(std::make_pair(max_dBi, beam_width(hpbw, max_dBi)));
 #else
@@ -419,12 +419,12 @@ std::vector < std::pair <double, double> > __fastcall compute_beam_width(const d
 	double step = max_dBi / 400;
 	for (int i = 0; i < 100 && dB < max_dBi; i++)
 	{
-   	if (!_3dB && dB >= 3.0)
-      {	// include the -3dB beamwidth
-			_3dB = true;
-         dB = 3.0;
-      }
-      bw.push_back(std::make_pair(dB, beam_width(hpbw, dB)));
+		if (!_3dB && dB >= 3.0)
+		{	// include the -3dB beamwidth
+				_3dB = true;
+			dB = 3.0;
+		}
+		bw.push_back(std::make_pair(dB, beam_width(hpbw, dB)));
 		dB += step;
 		step *= 1.2;
 	}
@@ -828,6 +828,7 @@ void __fastcall TForm1::WMInitGUI(TMessage &msg)
 
 void __fastcall TForm1::WMComputeDish(TMessage &msg)
 {
+	//(void)msg;
 	doUpdate();
 }
 
@@ -1011,7 +1012,8 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 		const int h = m_graph_bm->Height - m_top_margin  - m_bottom_margin;
 
 		// ************************************
-		// draw the estimated dish radiatopn pattern
+		// draw an estimated radiation pattern
+		// doesn't include any side or rear lobes that would be present in the 'real' world
 
 		if (!m_beam_width.empty())
 		{
@@ -1368,9 +1370,9 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 #if 0
 		// draw the mouse point
 		if (m_mouse_x >= m_left_margin &&
-		m_mouse_x <= (pb->Width - m_right_margin) &&
-		m_mouse_y >= m_top_margin &&
-		m_mouse_y <= (pb->Height - m_bottom_margin))
+			m_mouse_x <= (pb->Width - m_right_margin) &&
+			m_mouse_y >= m_top_margin &&
+			m_mouse_y <= (pb->Height - m_bottom_margin))
 		{
 			//const int w = pb->Width - m_right_margin - m_left_margin;
 			//const int h = pb->Height;
@@ -1457,9 +1459,9 @@ void __fastcall TForm1::doUpdate()
 	m_gain_dBi = d;
 #endif
 
-	if (!TryStrToFloat(FDRatioEdit->Text, d) || d < 0.18 || d > 10.0)
+	if (!TryStrToFloat(FDRatioEdit->Text, d) || d < 0.18 || d > 5.0)
 	{
-		Memo1->Lines->Add("error: F/D ratio (>= 0.18 <= 10)");
+		Memo1->Lines->Add("error: F/D ratio (>= 0.18 <= 5.0)");
 		return;
 	}
 	m_focus_diameter_ratio = d;
@@ -1567,6 +1569,12 @@ void __fastcall TForm1::doUpdate()
 	// desired taper to achieve 10 dB actual edge taper
 	m_desired_taper_dB = 10.0 - m_space_attenuation_dB;  // dB
 
+	if (m_desired_taper_dB <= 0.0)
+	{
+		Memo1->Lines->Add("error: F/D ratio (>= 0.18)");
+		return;
+	}
+
 	m_beam_width_3dB = m_feed_angle * sqrt(3.0 / m_desired_taper_dB);
 
 	m_simple_horn_diameter = 66.0 / (m_beam_width_3dB * rad_to_deg);       // in wave length
@@ -1673,8 +1681,8 @@ void __fastcall TForm1::doUpdate()
 		for (unsigned int i = 0; i < m_beam_width.size(); i++)
 		{
 			std::pair <double, double> bw = m_beam_width[i];
-         const double dB  = bw.first;
-         const double deg = bw.second;
+			const double dB  = bw.first;
+			const double deg = bw.second;
 			s.printf("  %6.2f   %5.1f       %6.2f", dB, deg, dB - m_gain_dBi);
 			Memo1->Lines->Add(s);
 		}
@@ -1779,4 +1787,3 @@ void __fastcall TForm1::CSpinChange(TObject *Sender)
 {
 	doUpdate();
 }
-
