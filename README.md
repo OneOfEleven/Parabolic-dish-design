@@ -12,6 +12,14 @@ You could use this to draw out a dishes desired curve without having to add a nu
 <img src="/Bent_steel_rod.png">
 </div>
 
+<br />
+
+Another way is to slowerly and smoothly rotate a bowl (any shape) of liquid (water etc). The surface, once settled will form a perfect parabola.
+<br />
+This technique has been used as a visible light telescope mirror using say mercury as the liquid ..
+
+https://en.wikipedia.org/wiki/Liquid-mirror_telescope
+
 ##
 
 An offset fed dish is nothing more than a cutout section (away from the center) of a larger straight fed circular prime focus dish.
