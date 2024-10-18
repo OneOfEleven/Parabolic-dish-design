@@ -22,7 +22,7 @@ https://en.wikipedia.org/wiki/Liquid-mirror_telescope
 
 ##
 
-An offset fed dish is nothing more than a cutout section (away from the center) of a larger straight fed circular prime focus dish.
+An offset fed dish is nothing more than a cutout section (away from the center) of a larger straight fed circular prime focus dish. An offset fed dish is more efficient due to the feed antenna no longer being in the path of radiation.
 
 Image from https://commons.wikimedia.org/wiki/File:Parabolic_antenna_types2.svg ..
 
