@@ -3,6 +3,10 @@ Computes the dimensions for a parabolic dish.
 
 Written/Compiled with Borland C++Builder v6
 
+<div align="center">
+<img src="/cap.png">
+</div>
+
 ##
 
 Suprising easy ways to create a perfect parabola such as bending a constant dia steel whip (2.5mm dia in this case).
