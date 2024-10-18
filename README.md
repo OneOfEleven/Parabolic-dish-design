@@ -11,4 +11,4 @@ You could use this to draw out a dishes desired curve without having to add a nu
 </div>
 
 
-An offset fed dish is nothing more than a cutout section from a circular prime focus dish.
+An offset fed dish is nothing more than a cutout section (away from the center) of a much larger straight fed circular prime focus dish.
