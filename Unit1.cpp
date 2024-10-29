@@ -368,6 +368,7 @@ double __fastcall computeX(const double f, const double y)
 //
 // https://www.satsig.net/pointing/antenna-beamwidth-calculator.htm
 
+// NB. this needs fixing to allow any efficiency value
 double __fastcall factor_k(const double dia, const double Hz, const double eff)
 {
 	// based on edge illumination -3dB beamwidth    aperture eff   overall eff
@@ -1081,6 +1082,10 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 			if (scale > ((w * 0.95f) / (petal_radius * 2)))
 				scale =   (w * 0.95f) / (petal_radius * 2);
 
+			const int r = (int)floor((petal_radius * scale) + 0.5);
+
+			const double petal_circumference = petal_radius * M_PI * 2;
+
 			// draw a circle
 			m_graph_bm->Canvas->Brush->Style = bsClear;
 			//m_graph_bm->Canvas->Brush->Style = bsSolid;
@@ -1089,9 +1094,13 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 			m_graph_bm->Canvas->Pen->Style = psDot;
 			m_graph_bm->Canvas->Pen->Width = 1;
 			drawCircle(m_graph_bm, w2, h2, (int)floor((petal_radius * scale) + 0.5));
-			s.printf(" %0.3f cm ", petal_radius * 100);
-			m_graph_bm->Canvas->Brush->Color = pb->Color;
-			m_graph_bm->Canvas->TextOut(w2 - (m_graph_bm->Canvas->TextWidth(s) / 2), h2 - (int)floor((petal_radius * scale) + 0.5) - (th * 1), s);
+			{
+				m_graph_bm->Canvas->Brush->Color = pb->Color;
+				s.printf(" %0.3f cm radius ", petal_radius * 100);
+				m_graph_bm->Canvas->TextOut(w2 - (m_graph_bm->Canvas->TextWidth(s) / 2), h2 - r - (th * 1), s);
+				s.printf(" %0.3f cm circumference", petal_circumference * 100);
+				m_graph_bm->Canvas->TextOut(w2 + 20, h2 - r + 5, s);
+			}
 
 			// draw the cutouts
 			for (int pet = 0; pet < m_petals; pet++)
@@ -1612,6 +1621,8 @@ void __fastcall TForm1::doUpdate()
 		Memo1->Lines->Add(s);
 		s.printf("                  Diameter: %0.1f cm (%0.3g M)", m_diameter_meters * 100, m_diameter_meters);
 		Memo1->Lines->Add(s);
+		s.printf("             Circumference: %0.1f cm (%0.3g M)", m_diameter_meters * M_PI * 100, m_diameter_meters * M_PI);
+		Memo1->Lines->Add(s);
 		s.printf("                      Gain: %0.2f dBi (%0.1f)", m_gain_dBi, m_gain);
 		Memo1->Lines->Add(s);
 		s.printf("Assumed overall efficiency: %0.1f%% (%0.2f)", m_efficiency * 100, m_efficiency);
@@ -1647,12 +1658,15 @@ void __fastcall TForm1::doUpdate()
 	if (m_petals >= 3 && !m_petal_point.empty())
 	{
 		Memo1->Lines->Add("");
-		Memo1->Lines->Add("Petal shape                                cut out     Petal");
-		Memo1->Lines->Add("    x (radius)  y (from back)  Radius      Segment     Width");
+		//Memo1->Lines->Add("Petal shape                                cut out     Petal");
+		//Memo1->Lines->Add("    x (radius)  y (from back)  Radius      Segment     Width");
+		Memo1->Lines->Add("Petal shape                                cut out");
+		Memo1->Lines->Add("    x (radius)  y (from back)  Radius      Width");
 		for (unsigned int i = 0; i < m_petal_point.size(); i++)
 		{
 			const t_petal_point p = m_petal_point[i];
-			s.printf(" %8.3fcm  %8.3fcm     %8.3fcm  %8.3fcm  %8.3fcm", p.x * 100, p.y * 100, p.r * 100, p.s * 100, p.w * 100);
+			//s.printf(" %8.3fcm  %8.3fcm     %8.3fcm  %8.3fcm  %8.3fcm", p.x * 100, p.y * 100, p.r * 100, p.s * 100, p.w * 100);
+			s.printf(" %8.3fcm  %8.3fcm     %8.3fcm  %8.3fcm", p.x * 100, p.y * 100, p.r * 100, p.s * 100);
 			Memo1->Lines->Add(s);
 		}
 	}
