@@ -125,6 +125,7 @@ private:
 	int                m_petals;
 	int                m_points;
 
+	double             m_area_sq_meters;
 	double             m_gain;
 	double             m_wave_length_meters;
 	double             m_focus_point_meters;

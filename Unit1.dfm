@@ -5,8 +5,8 @@ object Form1: TForm1
   Height = 500
   Caption = 'Form1'
   Color = clBtnFace
-  Constraints.MinHeight = 500
-  Constraints.MinWidth = 750
+  Constraints.MinHeight = 300
+  Constraints.MinWidth = 800
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -61,7 +61,7 @@ object Form1: TForm1
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Consolas'
-      Font.Style = []
+      Font.Style = [fsBold]
       Lines.Strings = (
         'Memo1')
       ParentFont = False

@@ -1086,6 +1086,8 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 
 			const double petal_circumference = petal_radius * M_PI * 2;
 
+			const int cx = m_graph_bm->Width - m_right_margin - r - 30;
+
 			// draw a circle
 			m_graph_bm->Canvas->Brush->Style = bsClear;
 			//m_graph_bm->Canvas->Brush->Style = bsSolid;
@@ -1093,13 +1095,13 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 			m_graph_bm->Canvas->Pen->Color = clRed;
 			m_graph_bm->Canvas->Pen->Style = psDot;
 			m_graph_bm->Canvas->Pen->Width = 1;
-			drawCircle(m_graph_bm, w2, h2, (int)floor((petal_radius * scale) + 0.5));
+			drawCircle(m_graph_bm, cx, h2, (int)floor((petal_radius * scale) + 0.5));
 			{
 				m_graph_bm->Canvas->Brush->Color = pb->Color;
 				s.printf(" %0.3f cm radius ", petal_radius * 100);
-				m_graph_bm->Canvas->TextOut(w2 - (m_graph_bm->Canvas->TextWidth(s) / 2), h2 - r - (th * 1), s);
+				m_graph_bm->Canvas->TextOut(cx - (m_graph_bm->Canvas->TextWidth(s) / 2), h2 - r - (th * 1), s);
 				s.printf(" %0.3f cm circumference", petal_circumference * 100);
-				m_graph_bm->Canvas->TextOut(w2 + 20, h2 - r + 5, s);
+				m_graph_bm->Canvas->TextOut(cx + 20, h2 - r + 5, s);
 			}
 
 			// draw the cutouts
@@ -1122,8 +1124,8 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 					const int x = (int)floor((sn * petal_radius * scale) + 0.5);
 					const int y = (int)floor((cs * petal_radius * scale) + 0.5);
 
-					m_graph_bm->Canvas->MoveTo(w2,     h2);
-					m_graph_bm->Canvas->LineTo(w2 + x, h2 - y);
+					m_graph_bm->Canvas->MoveTo(cx,     h2);
+					m_graph_bm->Canvas->LineTo(cx + x, h2 - y);
 				}
 				#endif
 
@@ -1150,9 +1152,9 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 					const int yyy = (int)floor(yy + 0.5);
 
 					if (i <= 0)
-						m_graph_bm->Canvas->MoveTo(w2 + xxx, h2 - yyy);
+						m_graph_bm->Canvas->MoveTo(cx + xxx, h2 - yyy);
 					else
-						m_graph_bm->Canvas->LineTo(w2 + xxx, h2 - yyy);
+						m_graph_bm->Canvas->LineTo(cx + xxx, h2 - yyy);
 				}
 
 				// left petal/cutout edge
@@ -1171,9 +1173,9 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 					const int yyy = (int)floor(yy + 0.5);
 
 					if (i <= 0)
-						m_graph_bm->Canvas->MoveTo(w2 + xxx, h2 - yyy);
+						m_graph_bm->Canvas->MoveTo(cx + xxx, h2 - yyy);
 					else
-						m_graph_bm->Canvas->LineTo(w2 + xxx, h2 - yyy);
+						m_graph_bm->Canvas->LineTo(cx + xxx, h2 - yyy);
 				}
 
 				{	// draw the petal/cutout end edge
@@ -1202,8 +1204,8 @@ void __fastcall TForm1::PaintBox1Paint(TObject *Sender)
 					const int xxx2 = (int)floor(xx2 + 0.5);
 					const int yyy2 = (int)floor(yy2 + 0.5);
 
-					m_graph_bm->Canvas->MoveTo(w2 + xxx1, h2 - yyy1);
-					m_graph_bm->Canvas->LineTo(w2 + xxx2, h2 - yyy2);
+					m_graph_bm->Canvas->MoveTo(cx + xxx1, h2 - yyy1);
+					m_graph_bm->Canvas->LineTo(cx + xxx2, h2 - yyy2);
 				}
 			}
 		}
@@ -1514,6 +1516,8 @@ void __fastcall TForm1::doUpdate()
 
 	m_wave_length_meters = sol / m_frequency_Hz;
 
+	m_area_sq_meters = M_PI * (m_diameter_meters / 2) * (m_diameter_meters / 2);
+	 
 #if 1
 	// gain to dish diameter
 	m_gain = (m_diameter_meters * M_PI) / m_wave_length_meters;
@@ -1602,7 +1606,6 @@ void __fastcall TForm1::doUpdate()
 	Memo1->Lines->BeginUpdate();
 
 	{
-		Memo1->Lines->Add("");
 		if (m_frequency_Hz < 1e3)
 			s.printf("                 Frequency: %0.1g Hz", m_frequency_Hz / 1e0);
 		else
@@ -1619,15 +1622,17 @@ void __fastcall TForm1::doUpdate()
 		Memo1->Lines->Add(s);
 		s.printf("        Wave length/Lambda: %0.2f cm (%0.4f M)", m_wave_length_meters * 100, m_wave_length_meters);
 		Memo1->Lines->Add(s);
-		s.printf("                  Diameter: %0.1f cm (%0.3g M)", m_diameter_meters * 100, m_diameter_meters);
+		s.printf("                  Diameter: %0.1f cm (%0.3g M), %0.1f lambda", m_diameter_meters * 100, m_diameter_meters, m_diameter_meters / m_wave_length_meters);
 		Memo1->Lines->Add(s);
 		s.printf("             Circumference: %0.1f cm (%0.3g M)", m_diameter_meters * M_PI * 100, m_diameter_meters * M_PI);
+		Memo1->Lines->Add(s);
+		s.printf("                      Area: %0.3g square meters", m_area_sq_meters);
 		Memo1->Lines->Add(s);
 		s.printf("                      Gain: %0.2f dBi (%0.1f)", m_gain_dBi, m_gain);
 		Memo1->Lines->Add(s);
 		s.printf("Assumed overall efficiency: %0.1f%% (%0.2f)", m_efficiency * 100, m_efficiency);
 		Memo1->Lines->Add(s);
-		s.printf("          Feed focus point: %0.1f cm from back of dish", m_focus_point_meters * 100);
+		s.printf("          Feed/focus point: %0.1f cm from center of dish face", m_focus_point_meters * 100);
 		Memo1->Lines->Add(s);
 		s.printf("        Illumination angle: %0.2f\xB0", m_feed_angle * rad_to_deg);
 		Memo1->Lines->Add(s);
@@ -1658,10 +1663,8 @@ void __fastcall TForm1::doUpdate()
 	if (m_petals >= 3 && !m_petal_point.empty())
 	{
 		Memo1->Lines->Add("");
-		//Memo1->Lines->Add("Petal shape                                cut out     Petal");
-		//Memo1->Lines->Add("    x (radius)  y (from back)  Radius      Segment     Width");
-		Memo1->Lines->Add("Petal shape                                cut out");
-		Memo1->Lines->Add("    x (radius)  y (from back)  Radius      Width");
+		Memo1->Lines->Add("Petal shape                                cut out     Petal");
+		Memo1->Lines->Add("    x (radius)  y (from back)  Radius      Segment     Width");
 		for (unsigned int i = 0; i < m_petal_point.size(); i++)
 		{
 			const t_petal_point p = m_petal_point[i];
@@ -1669,6 +1672,14 @@ void __fastcall TForm1::doUpdate()
 			s.printf(" %8.3fcm  %8.3fcm     %8.3fcm  %8.3fcm", p.x * 100, p.y * 100, p.r * 100, p.s * 100);
 			Memo1->Lines->Add(s);
 		}
+
+		// https://www.calculator.net/triangle-calculator.html
+		const double r = m_diameter_meters / 2;
+		const double r22 = 2 * r * r;
+		const double pw = sqrt(r22 - r22 * cos((360.0 * deg_to_rad) / m_petals));
+		s.printf("petal corner to petal corner %0.3fcm, %0.3fcm circumference", pw * 100, pw * m_petals * 100);
+		Memo1->Lines->Add("");
+		Memo1->Lines->Add(s);
 	}
 
 	if (m_petals >= 3)

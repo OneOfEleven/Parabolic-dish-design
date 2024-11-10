@@ -9,7 +9,7 @@ Written/Compiled with Borland C++Builder v6
 
 ##
 
-Suprising easy ways to create a perfect parabola such as bending a constant dia steel whip (2.5mm dia in this case).
+Suprisingly easy ways to create a parabola such as bending a constant dia metal rod/whip (2.5mm dia steel whip in this case).
 You could use this to draw out a dish curve without having to create a template using a number of spot measurements.
 
 <div align="center">
@@ -26,7 +26,7 @@ https://en.wikipedia.org/wiki/Liquid-mirror_telescope
 
 ##
 
-An offset fed dish is nothing more than a cutout section (away from the center) of a larger straight fed circular prime focus dish. An offset fed dish is more efficient due to the feed antenna no longer being in the path of radiation.
+An offset fed dish is nothing more than a cutout section (away from the center) of a larger straight fed circular prime focus dish. An offset fed dish is more efficient due to the feed antenna no longer partly blocking the path of radiation.
 
 Image from https://commons.wikimedia.org/wiki/File:Parabolic_antenna_types2.svg ..
 
